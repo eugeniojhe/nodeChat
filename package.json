@@ -1,0 +1,14 @@
+{
+  "name": "nodechat",
+  "version": "1.0.0",
+  "description": "It is a simple chat using node express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eugenio - José Humberto",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
