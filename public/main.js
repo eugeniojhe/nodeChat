@@ -23,17 +23,28 @@ loginInput.addEventListener('keyup',(e) =>{
 });
 
 
-console.log('Afer seending request'); 
 socket.on('user-ok',(usersConnected) => {
     loginPage.style.display = 'none'; 
     chatPage.style.display  = 'flex'; 
     textInput.focus(); 
-    usersList = usersConnected; 
-    renderUserList(); 
+    renderUsersList( usersConnected); 
 })
 
+socket.on('list-update',(data) => {
+    let list = data.list;  
+    renderUsersList(list); 
+});
 
-renderUsersList = function() 
+
+renderUsersList = function(usersConnected) 
 {
-
+    let ul = document.querySelector('.usersList');
+    ul.innerHTML = ''; 
+    usersConnected.forEach(user => {
+         ul.innerHTML += `<li>${user}</li>`
+    });
+   /*  usersConnected.map((data,index) =>{
+        console.log('loop mapa '+data);        
+        ul.querySelector('li').innerHTML = data; 
+    }); */
 }
