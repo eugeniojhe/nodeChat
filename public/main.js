@@ -28,10 +28,17 @@ socket.on('user-ok',(usersConnected) => {
     chatPage.style.display  = 'flex'; 
     textInput.focus(); 
     renderUsersList( usersConnected); 
+    addMessage('status', '', 'connected'); 
 })
 
 socket.on('list-update',(data) => {
     let list = data.list;  
+    if (data.joined){
+        addMessage('status','',data.joined+' Entrando no chat'); 
+    }
+    if (data.left){
+        addMessage('status','',data.left+' Saindo do chat'); 
+    }
     renderUsersList(list); 
 });
 
@@ -47,4 +54,19 @@ renderUsersList = function(usersConnected)
         console.log('loop mapa '+data);        
         ul.querySelector('li').innerHTML = data; 
     }); */
+}
+
+addMessage = function(type, user, msg)
+{
+    let ul = document.querySelector('.chatList'); 
+    switch(type){
+        case 'status':
+            ul.innerHTML += `<li class="m-status">${msg}</li>`; 
+            break ;
+        case 'msg':
+            ul.innerHTML += `<li class="m-txt"><span>${user}</span>${msg}</li>`;
+            break; 
+        default:
+            break;    
+    }
 }

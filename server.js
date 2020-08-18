@@ -21,7 +21,7 @@ io.on('connection', (socket) => {
         socket.emit('user-ok',connectedUsers);
         
         socket.broadcast.emit('list-update',{
-            joined:userName,
+            joined:socket.userName,
             list:connectedUsers,
         });
     }); 
@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
 
         connectedUsers = connectedUsers.filter(u => u != socket.userName);
         socket.broadcast.emit('list-update',{
-            let:socket.userName, 
+            left:socket.userName, 
             list:connectedUsers, 
         });
 
