@@ -22,6 +22,15 @@ loginInput.addEventListener('keyup',(e) =>{
     }
 });
 
+textInput.addEventListener('keyup', (e) => {
+    if (e.keyCode === 13){
+        let message = textInput.value.trim(); 
+        textInput.value = ''; 
+        if (message != ''){
+            socket.emit('send-msg',message); 
+        }
+    }
+})
 
 socket.on('user-ok',(usersConnected) => {
     loginPage.style.display = 'none'; 
@@ -41,6 +50,28 @@ socket.on('list-update',(data) => {
     }
     renderUsersList(list); 
 });
+
+socket.on('show-msg',(data) => {
+    addMessage('msg',data.userName, data.message); 
+});
+
+socket.on('disconnect',() => {
+    renderUsersList([]);
+    addMessage('status', null, 'Você foi desconectado do chat'); 
+});
+
+socket.on('reconnect_error', () => {
+    addMessage('status', null, 'Tentand reconectar'); 
+})
+
+socket.on('reconnect', () => {
+    addMessage('status', null, 'Reconectado'); 
+    if (userName != ''){
+        socket.emit('join-request',userName); 
+    }
+})
+
+
 
 
 renderUsersList = function(usersConnected) 
@@ -64,9 +95,14 @@ addMessage = function(type, user, msg)
             ul.innerHTML += `<li class="m-status">${msg}</li>`; 
             break ;
         case 'msg':
-            ul.innerHTML += `<li class="m-txt"><span>${user}</span>${msg}</li>`;
+            if (userName == user){
+                ul.innerHTML += `<li class="m-txt"><span class="me">${user} </span>${msg}</li>`;
+            }else {
+                 ul.innerHTML += `<li class="m-txt"><span>${user} </span>${msg}</li>`;
+            }
             break; 
         default:
             break;    
     }
+    ul.scrollTop = ul.scrollHeight; 
 }

@@ -33,8 +33,15 @@ io.on('connection', (socket) => {
             left:socket.userName, 
             list:connectedUsers, 
         });
-
     });
+    socket.on('send-msg', (txt) => {
+        let obj = {
+            userName: socket.userName, 
+            message: txt, 
+        };
+        socket.emit('show-msg',obj); 
+        socket.broadcast.emit('show-msg',obj); 
+    })
 }); 
 
 app.use(express.static(path.join(__dirname,'public'))); 
